@@ -1,60 +1,52 @@
 package com.example.a622k
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Config
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-    val TAG : String = MainActivity::class.java.simpleName
+    var sharedPreferences: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViews()
     }
-    private fun initViews() {
-        val name = findViewById<EditText>(R.id.name)
-        val email = findViewById<EditText>(R.id.email)
-        val pas = findViewById<EditText>(R.id.pas)
-        val cpas = findViewById<EditText>(R.id.cpass)
-        val save = findViewById<Button>(R.id.save)
 
+    private fun initViews() {
+        val email1 = findViewById<EditText>(R.id.email)
+        val pas = findViewById<EditText>(R.id.pas)
+        val save = findViewById<Button>(R.id.LogIn)
+        val textView = findViewById<TextView>(R.id.signIn)
 
         save.setOnClickListener {
 
-            val name: String = name.text.toString()
-            PrefsManager.getInstance(this)!!.saveData(1, name)
-            val data = PrefsManager.getInstance(this)!!.getData(1)
-            saveEmail(data)
+            val emailValue = email1.text.toString()
+            val passwordValue = pas.text.toString()
 
-            val email: String = email.text.toString()
-            PrefsManager.getInstance(this)!!.saveData(1, email)
-            val data1 = PrefsManager.getInstance(this)!!.getData(1)
-            saveEmail(data1)
+            val registeredEmail = sharedPreferences!!.getString("emailValue", "")
+            val registeredPassword = sharedPreferences!!.getString("pasValue", "")
 
-            val pas: String = pas.text.toString()
-            PrefsManager.getInstance(this)!!.saveData(1, pas)
-            val data2 = PrefsManager.getInstance(this)!!.getData(1)
-            saveEmail(data2)
-
-            val cpas: String = cpas.text.toString()
-            PrefsManager.getInstance(this)!!.saveData(1, cpas)
-            val data3 = PrefsManager.getInstance(this)!!.getData(1)
-            saveEmail(data3)
-
-            Log.d(TAG, email )
-
+            if (emailValue == registeredEmail && passwordValue == registeredPassword) {
+                val intent = Intent(this@MainActivity, LastActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+        textView.setOnClickListener {
+            val intent = Intent(this@MainActivity, SignInActivity::class.java)
+            startActivity(intent)
+        }
+        save.setOnClickListener {
+            val intent = Intent(this@MainActivity, LastActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    private fun saveEmail(email: String?) {
-        val prefs = applicationContext.getSharedPreferences("MyPref", MODE_PRIVATE)
-        val editor = prefs.edit()
-        if (email != null) {
-            editor.putString("email", email)
-        }
-        editor.apply()
-    }
 }
