@@ -24,29 +24,31 @@ class MainActivity : AppCompatActivity() {
         val save = findViewById<Button>(R.id.LogIn)
         val textView = findViewById<TextView>(R.id.signIn)
 
+        sharedPreferences = getSharedPreferences("userInfo", 0)
+
         save.setOnClickListener {
 
             val emailValue = email1.text.toString()
             val passwordValue = pas.text.toString()
 
             val registeredEmail = sharedPreferences!!.getString("emailValue", "")
-            val registeredPassword = sharedPreferences!!.getString("pasValue", "")
+            val registeredPassword = sharedPreferences!!.getString("passwordValue", "")
 
-            if (emailValue == registeredEmail && passwordValue == registeredPassword) {
-                val intent = Intent(this@MainActivity, LastActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+            if (email1.length() > 1 && pas.length() > 1) {
+                if (emailValue == registeredEmail && passwordValue == registeredPassword) {
+                    val intent = Intent(this@MainActivity, LastActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }else {
+                Toast.makeText(this@MainActivity, "Please, Sign in", Toast.LENGTH_SHORT).show()
             }
         }
+
         textView.setOnClickListener {
             val intent = Intent(this@MainActivity, SignInActivity::class.java)
             startActivity(intent)
         }
-        save.setOnClickListener {
-            val intent = Intent(this@MainActivity, LastActivity::class.java)
-            startActivity(intent)
-        }
     }
-
 }

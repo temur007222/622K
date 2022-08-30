@@ -21,29 +21,40 @@ class SignInActivity  : AppCompatActivity() {
         val cpas = findViewById<EditText>(R.id.cpass)
         val save = findViewById<Button>(R.id.register)
         val cancel = findViewById<TextView>(R.id.cancel)
+
         sharedPreferences = getSharedPreferences("userInfo", 0)
+
         save.setOnClickListener {
             val emailValue = email1.text.toString()
             val passwordValue = pas.text.toString()
             val nameValue = name.text.toString()
             val cpasValue = cpas.text.toString()
-            if (emailValue.length > 1) {
-                val editor = sharedPreferences?.edit()
-                editor?.putString("emailValue", emailValue)
-                editor?.putString("passwordValue", passwordValue)
-                editor?.putString("nameValue", nameValue)
-                editor?.putString("cpasValue", cpasValue)
-                editor?.apply()
-                Toast.makeText(this@SignInActivity, "Successfully Registered", Toast.LENGTH_SHORT)
-                    .show()
-                finish()
+
+            if (emailValue.length > 1 && packageCodePath.length > 1) {
+                if (passwordValue == cpasValue) {
+
+                    val editor = sharedPreferences?.edit()
+                    editor?.putString("emailValue", emailValue)
+                    editor?.putString("passwordValue", passwordValue)
+                    editor?.putString("nameValue", nameValue)
+                    editor?.putString("cpasValue", cpasValue)
+                    editor?.apply()
+
+                    Toast.makeText(
+                        this@SignInActivity,
+                        "Successfully Registered",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }else {
+                    Toast.makeText(
+                        this@SignInActivity,
+                        "Invalid confirm password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } else {
-                Toast.makeText(
-                    this@SignInActivity,
-                    "Form the application, please",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                Toast.makeText(this@SignInActivity, "Form the application fully, please", Toast.LENGTH_SHORT).show()
             }
         }
         cancel.setOnClickListener {
